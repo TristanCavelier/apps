@@ -36,13 +36,6 @@ var ecc = new toolbox.ExtendedCancellableChain();
 (function () {
   "use strict";
 
-  // Load js-terminal-rc from localStorage
-  try {
-    eval(localStorage.getItem(".js-terminal-rc"));
-  } catch (e) {
-    ERR = e;
-  }
-
   // Load terminal
   var terminal = document.createElement("div");
   document.body.appendChild(terminal);
@@ -198,3 +191,10 @@ function textareaEdit(uri) {
 }
 
 var edit = textareaEdit;
+
+// Load js-terminal-rc from localStorage
+try {
+  eval(localStorage.getItem(".js-terminal-rc"));
+} catch (e) {
+  ERR = e;
+}
