@@ -170,7 +170,14 @@ function textareaEdit(uri) {
   ecc.getURI(uri).toText().setTo(textarea, "value").then(function () {
     root.appendChild(textarea);
     stateSpan.textContent = "";
-  }).catch(alert);
+  }, function (error) {
+    if (error && error.status === 404) {
+      root.appendChild(textarea);
+      stateSpan.textContent = " - New resource ";
+      return;
+    }
+    alert(error);
+  });
   saveButton.textContent = "Save";
   saveButton.addEventListener("click", function () {
     stateSpan.textContent = "- Saving ";
