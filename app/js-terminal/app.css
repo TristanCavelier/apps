@@ -1,0 +1,34 @@
+body {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+
+  color: white;
+  background-color: black;
+}
+.prompt, .prompt-button {
+  width: 100%;
+  border: 1px solid gray;
+
+  color: white;
+  background-color: black;
+}
+.disabled {
+  border-color: #303030;
+  color: gray;
+}
+.output pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.output textarea {
+  width: 100%;
+}
+.output iframe {
+  width: 100%;
+  height: 90%;
+  background-color: white;
+  border: 0;
+}
