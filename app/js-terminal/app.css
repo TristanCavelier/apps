@@ -11,6 +11,8 @@ body {
 .prompt, .prompt-button {
   width: 100%;
   border: 1px solid gray;
+  box-sizing: border-box;
+  vertical-align: top;
 
   color: white;
   background-color: black;
