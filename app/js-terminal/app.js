@@ -6,7 +6,7 @@
     http://www.wtfpl.net/ for more details. */
 
 /*jslint indent: 2, evil: true */
-/*global HTMLElement, localStorage, setTimeout, document, alert, toolbox */
+/*global HTMLElement, localStorage, setTimeout, document, alert, window, toolbox */
 
 var HELP = document.createElement("div");
 HELP.insertAdjacentHTML(
@@ -106,7 +106,7 @@ var ecc = new toolbox.ExtendedCancellableChain();
       terminal.appendChild(output);
       HIST[valueIndex] = inputValue;
       return ecc.then(function () {
-        RET = eval(inputValue);
+        RET = window.eval(inputValue);
         return RET;
       }).then(function (eVal) {
         ANS = eVal;
@@ -194,7 +194,7 @@ var edit = textareaEdit;
 
 // Load js-terminal-rc from localStorage
 try {
-  eval(localStorage.getItem(".js-terminal-rc"));
+  window.eval(localStorage.getItem(".js-terminal-rc"));
 } catch (e) {
   ERR = e;
 }
