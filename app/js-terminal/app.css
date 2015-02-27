@@ -27,6 +27,7 @@ body {
 }
 .output textarea {
   width: 100%;
+  box-sizing: border-box;
 }
 .output iframe {
   width: 100%;
