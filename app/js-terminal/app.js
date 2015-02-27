@@ -22,7 +22,7 @@ HELP.insertAdjacentHTML(
     '  (see `<code style="color: blue">dir(ecc)</code>`.)' +
     '</p>' +
     '<p>Use <span style="color: yellow">Ctrl-ArrowUp</span> or <span style="color: yellow">Ctrl-ArrowDown</span> to browse command history</p>' +
-    '<p>See source code on <a href="http://github.com/TristanCavelier/apps/app/js-terminal">github</a>!</p>'
+    '<p>See source code on <a href="https://github.com/TristanCavelier/apps/tree/master/app/js-terminal">github</a>!</p>'
 );
 
 var RET;
