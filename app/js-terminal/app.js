@@ -33,6 +33,7 @@ var HIST = [];
 var help = HELP;
 
 var ecc = new toolbox.ExtendedCancellableChain();
+var str = new toolbox.ExtendedStreamableChain();
 (function () {
   "use strict";
 
@@ -101,7 +102,7 @@ var ecc = new toolbox.ExtendedCancellableChain();
         input.addEventListener("keydown", onKeyDown);
       });
     }).then(function (inputValue) {
-      var output = document.createElement("div"), pre = document.createElement("pre");
+      var output = document.createElement("div");
       output.className = "output";
       terminal.appendChild(output);
       HIST[valueIndex] = inputValue;
@@ -109,15 +110,35 @@ var ecc = new toolbox.ExtendedCancellableChain();
         RET = window.eval(inputValue);
         return RET;
       }).then(function (eVal) {
+        var pre;
         ANS = eVal;
         if (!(eVal instanceof HTMLElement)) {
+          pre = document.createElement("pre");
           pre.textContent = eVal;
           eVal = pre;
+        } else if (eVal && typeof eVal.toStream === "function") {
+          return toolbox.ExtendedStreamableChain.pipe(eVal, {push: function (pushed) {
+            var span;
+            if (pushed instanceof HTMLElement) {
+              output.appendChild(pushed);
+              pre = null;
+            } else {
+              if (!pre) {
+                pre = document.createElement("pre");
+                output.appendChild(pre);
+              }
+              span = document.createElement("span");
+              span.textContent = eVal;
+              pre.appendChild(span);
+            }
+          }});
         }
         output.appendChild(eVal);
       }).catch(function (e) {
+        var pre = document.createElement("pre");
         ERR = e;
         pre.textContent = e;
+        pre.style.color = "red";
         output.appendChild(pre);
       });
     });
