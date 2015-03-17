@@ -22,6 +22,8 @@
   /*global window, document, location, alert, prompt, confirm, setTimeout,
            toolbox, CodeMirror */
 
+  var originalPageTitle = document.title;
+
   ///////////
   // Tools //
   ///////////
@@ -35,9 +37,9 @@
     return uri.replace(/^([a-z]+:)?((?:[^\/]*\/)*)([^\/]*)$/, function (match, protocol, dirname, basename) {
       /*jslint unparam: true */
       if (basename) {
-        return basename + " (" + (protocol || "") + dirname + ") - Code editor";
+        return basename + " (" + (protocol || "") + dirname + ") - " + originalPageTitle;
       }
-      return (protocol || "") + dirname + " - Code editor";
+      return (protocol || "") + dirname + " - " + originalPageTitle;
     });
   }
 
