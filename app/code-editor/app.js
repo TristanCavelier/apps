@@ -28,6 +28,31 @@
   // Tools //
   ///////////
 
+  // Object.keys(CodeMirror.mimeModes).map(function (mime) { return '"' + CodeMirror.mimeModes[mime] + '": "' + mime + '"'; }).join(",\n")
+  var modeMimes = {
+    "undefined": "text/plain",
+    "null": "text/plain",
+    "css": "text/css",
+    "javascript": "application/javascript",
+    "htmlmixed": "text/html",
+    "xml": "application/xml",
+    "python": "text/x-python",
+    "clike": "text/x-c",
+    "java": "text/x-java",
+    "csharp": "text/x-csharp",
+    "scala": "text/x-scala",
+    "markdown": "text/x-markdown",
+    "php": "text/x-php",
+    "diff": "text/x-diff",
+    "rst": "text/x-rst",
+    "stex": "text/x-stex",
+    "perl": "text/x-perl",
+    "ruby": "text/x-ruby",
+    "shell": "text/x-sh",
+    "sql": "text/x-sql",
+    "go": "text/x-go"
+  };
+
   function randomChoose(array) {
     return array[parseInt(Math.random() * array.length, 10)];
   }
@@ -277,5 +302,18 @@
   }
 
   window.editor = editor;
+
+
+  //////////////////////
+  // Add gist feature //
+  //////////////////////
+
+  // try to save to "data:"
+  toolbox.ExtendedCancellableChain.prototype.putDataURI = function () {
+    this.toDataURI(modeMimes[editor.getOption("mode")] || "text/plain").then(function (dataURI) {
+      location.hash = "#" + dataURI;
+    });
+    return;
+  };
 
 }));
