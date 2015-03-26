@@ -310,7 +310,13 @@
 
   // try to save to "data:"
   toolbox.ExtendedCancellableChain.prototype.putDataURI = function () {
-    this.toDataURI(modeMimes[editor.getOption("mode")] || "text/plain").then(function (dataURI) {
+    var editorMode = editor.getOption("mode"), mimetype = toolbox.parseContentTypeToObject(editorMode);
+    if (mimetype.match === mimetype.input) {
+      mimetype = editorMode;
+    } else {
+      mimetype = modeMimes[editorMode] || "text/plain";
+    }
+    this.toDataURI(mimetype).then(function (dataURI) {
       location.hash = "#" + dataURI;
     });
     return;
