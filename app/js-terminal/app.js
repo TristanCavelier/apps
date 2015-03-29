@@ -215,6 +215,13 @@ function textareaEdit(uri) {
 
 var edit = textareaEdit;
 
+function showLinks(uri) {
+  "use strict";
+  return ecc.getURILinks(uri).then(toolbox.linksToHTMLElement);
+}
+
+var links = showLinks;
+
 // Load js-terminal-rc from localStorage
 try {
   window.eval(localStorage.getItem(".js-terminal-rc"));
