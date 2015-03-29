@@ -19,7 +19,7 @@ HELP.insertAdjacentHTML(
     '<p>' +
     '  The `<code style="color: blue">dir(..)</code>` function shows object properties,' +
     '  it is useful to know what kind of object you are manipulating.' +
-    '  (see `<code style="color: blue">dir(ecc)</code>`.)' +
+    '  (see `<code style="color: blue">dir(window)</code>`.)' +
     '</p>' +
     '<p>Use <span style="color: yellow">Ctrl-ArrowUp</span> or <span style="color: yellow">Ctrl-ArrowDown</span> to browse command history</p>' +
     '<p>See source code on <a href="https://github.com/TristanCavelier/apps/tree/master/app/js-terminal">github</a>!</p>'
