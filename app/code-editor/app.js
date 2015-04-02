@@ -53,6 +53,17 @@
     "go": "text/x-go"
   };
 
+  var modeShortcuts = {
+    "c": "clike",
+    "c++": "clike",
+    "c#": "csharp",
+    "html": "htmlmixed",
+    "js": "javascript",
+    "md": "markdown",
+    "py": "python",
+    "sh": "shell"
+  };
+
   function randomChoose(array) {
     return array[parseInt(Math.random() * array.length, 10)];
   }
@@ -174,9 +185,9 @@
     if (!filename) { return alert("Empty filename, aborting."); }
     toolbox.downloadAs(filename, "application/octet-stream", cm.getValue());
   };
-  commands["mode doc"] = "{javascript|xml|htmlmixed|...}";
+  commands["mode doc"] = "{javascript|html|python|...}";
   commands.mode = function (cm, args) {
-    cm.setOption("mode", args[1]);
+    cm.setOption("mode", modeShortcuts[args[1]] || args[1]);
     cm.setOption("lint", false);
     if (CodeMirror.lint[cm.getOption("mode")]) {
       setTimeout(function () { cm.setOption("lint", true); });
