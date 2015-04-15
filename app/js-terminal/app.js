@@ -185,6 +185,21 @@
     };
 
     tmp.links = tmp.showLinks;
+
+    tmp.cat = function () {
+      // cat(uri1, uri2, ...)
+      return ecc.value([].slice.call(arguments)).forEach(function (uri, i, array) {
+        return ecc.getURI(uri).toText().setTo(array, i);
+      }).join("");
+    };
+
+    tmp.rm = function (uri) {
+      return ecc.deleteURI(uri).toText();
+    };
+
+    tmp.cp = function (src, dest) {
+      return ecc.getURI(src).putURI(dest).toText();
+    };
   }
 
 
