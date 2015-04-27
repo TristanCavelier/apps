@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>JS terminal bundle builder</title>
+    <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1" />
+    <script src="../../lib/toolbox.js"></script>
+    <script src="../../lib/bundle-builder.js"></script>
+  </head>
+  <body>
+    <script>
+bundleBuilder.build({
+  "logInto": "body",
+  "jsDestination": "http://my.domain.com/js-terminal-bundle.js",
+  "cssDestination": "http://my.domain.com/js-terminal-bundle.css",
+  "appCacheDestination": "http://my.domain.com/js-terminal-bundle.appcache",
+  "jsList": [
+    "http://rawgit.com/TristanCavelier/apps/master/lib/toolbox.js",
+    "http://rawgit.com/TristanCavelier/apps/master/app/js-terminal/js-terminal.js"
+  ],
+  "cssList": [
+    "http://rawgit.com/TristanCavelier/apps/master/app/js-terminal/js-terminal.css"
+  ],
+  "appCacheList": [
+    "http://rawgit.com/TristanCavelier/apps/master/app/js-terminal/js-terminal-bundle.js",
+    "http://rawgit.com/TristanCavelier/apps/master/app/js-terminal/js-terminal-bundle.css"
+  ]
+});
+    </script>
+  </body>
+</html>
