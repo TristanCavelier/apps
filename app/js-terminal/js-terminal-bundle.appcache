@@ -1,0 +1,7 @@
+CACHE MANIFEST
+#5c03c49f-8a3a-5a3c-53cf-b5c593b40fb4
+NETWORK:
+*
+CACHE:
+http://rawgit.com/TristanCavelier/apps/master/app/js-terminal/js-terminal-bundle.js
+http://rawgit.com/TristanCavelier/apps/master/app/js-terminal/js-terminal-bundle.css
