@@ -24,4 +24,7 @@
     "onAnswer": function (answer) { window.ANS = answer; } // optional
   });
 
+  window.ecc = new toolbox.ExtendedCancellableChain();
+  window.esc = new toolbox.ExtendedStreamableChain();
+
 }());
