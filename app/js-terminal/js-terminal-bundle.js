@@ -3397,32 +3397,43 @@
     var root = document.createElement("div");
     var textarea = document.createElement("textarea");
     var saveButton = document.createElement("button");
+    saveButton.textContent = "Save";
     var stateSpan = document.createElement("span");
     var titleSpan = document.createElement("span");
+    titleSpan.textContent = " <" + uri + "> - Textarea Editor ";
     var exitButton = document.createElement("button");
+    exitButton.textContent = "Close";
+    function lock() {
+      textarea.readOnly = true;
+      saveButton.disabled = true;
+      exitButton.disabled = true;
+    }
+    function unlock() {
+      textarea.readOnly = false;
+      saveButton.disabled = false;
+      exitButton.disabled = false;
+    }
+    lock();
     stateSpan.textContent = " - Loading ";
     ecc.getURI(uri).toText().setTo(textarea, "value").then(function () {
       root.appendChild(textarea);
       stateSpan.textContent = "";
-    }, function (error) {
+    }).catch(function (error) {
       if (error && error.status === 404) {
         root.appendChild(textarea);
         stateSpan.textContent = " - New resource ";
         return;
       }
       return ecc.alert(error);
-    });
-    saveButton.textContent = "Save";
+    }).then(unlock);
     saveButton.addEventListener("click", function () {
       stateSpan.textContent = " - Saving ";
-      textarea.readOnly = true;
+      lock();
       ecc.value(textarea.value).putURI(uri).catch(ecc.alert.bind(ecc)).then(function () {
-        textarea.readOnly = false;
+        unlock();
         stateSpan.textContent = "";
       });
     });
-    titleSpan.textContent = " textarea editor - <" + uri + "> ";
-    exitButton.textContent = "Close";
     exitButton.addEventListener("click", root.remove.bind(root));
     root.appendChild(saveButton);
     root.appendChild(titleSpan);
@@ -3458,6 +3469,10 @@
     if (typeof root === "string") {
       root = document.querySelector(root);
     }
+    tmp = document.createElement("div");
+    tmp.className = "js-terminal";
+    root.appendChild(tmp);
+    root = tmp;
 
     tmp = ecc;
     // load rc
