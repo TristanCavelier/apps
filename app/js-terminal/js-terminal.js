@@ -154,6 +154,10 @@
     if (typeof root === "string") {
       root = document.querySelector(root);
     }
+    tmp = document.createElement("div");
+    tmp.className = "js-terminal";
+    root.appendChild(tmp);
+    root = tmp;
 
     tmp = ecc;
     // load rc
