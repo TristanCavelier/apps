@@ -1,16 +1,16 @@
 /********************************************************************/
 /* BEGIN http://rawgit.com/TristanCavelier/apps/master/app/js-terminal/js-terminal.css */
-body {
-  position: absolute;
+.js-terminal {
   padding: 0;
   margin: 0;
   height: 100%;
   width: 100%;
+  overflow: auto;
 
   color: white;
   background-color: black;
 }
-.prompt, .prompt-button {
+.js-terminal .prompt, .js-terminal .prompt-button {
   width: 100%;
   border: 1px solid gray;
   box-sizing: border-box;
@@ -19,19 +19,19 @@ body {
   color: white;
   background-color: black;
 }
-.disabled {
+.js-terminal .disabled {
   border-color: #303030;
   color: gray;
 }
-.output pre {
+.js-terminal .output pre {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
-.output textarea {
+.js-terminal .output textarea {
   width: 100%;
   box-sizing: border-box;
 }
-.output iframe {
+.js-terminal .output iframe {
   width: 100%;
   height: 90%;
   background-color: white;
