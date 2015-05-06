@@ -3325,7 +3325,7 @@
 
   /*global window, document, HTMLElement, alert, setTimeout,
            toolbox, exports */
-  var jsTerminal = {}, ecc = new toolbox.ExtendedCancellableChain();
+  var jsTerminal = {}, ecc = new toolbox.ExtendedCancellableChain(), div;
   if (typeof exports === "object" && exports !== null) {
     jsTerminal = exports;
   } else if (typeof window === "object" && window !== null) {
@@ -3391,6 +3391,15 @@
   };
 
   jsTerminal.commands.links = jsTerminal.commands.showLinks;
+
+  jsTerminal.commands.upload = function (uri) {
+    return ecc.promptFile().then(function (file) {
+      if (!file) {
+        throw new Error("No file given");
+      }
+      return file;
+    }).putURI(uri).toText();
+  };
 
   jsTerminal.commands.textareaEdit = function (uri) {
     /*jslint vars: true */
@@ -3462,10 +3471,19 @@
     return t;
   };
 
+  div = document.createElement("div");
+  function htmlToElements(html) {
+    div.innerHTML = html;
+    return div.querySelectorAll("*");
+  }
+
   jsTerminal.create = function (param) {
-    var rc = param.rc || null, root = param.root, historyList = [],
-      onError = param.onError, onValue = param.onValue, onAnswer = param.onAnswer,
-      tmp;
+    var rc, root, historyList = [], onError, onValue, onAnswer, tmp;
+    rc = param.rc || null;
+    root = param.root;
+    onError = param.onError;
+    onValue = param.onValue;
+    onAnswer = param.onAnswer;
     if (typeof root === "string") {
       root = document.querySelector(root);
     }
@@ -3478,14 +3496,14 @@
     // load rc
     if (rc) {
       tmp = tmp.then(function () {
-        return ecc.getURI(rc).catch(function (reason) {
+        return ecc.getURI(rc).toText().catch(function (reason) {
           if (typeof onError === "function") { try { onError(reason); } catch (ignore) {} }
           if (reason && reason.status !== 404) {
             alert(reason);
           }
           return "";
         });
-      }).call(null, termEval).catch(function (reason) {
+      }).then(termEval).catch(function (reason) {
         if (typeof onError === "function") { try { onError(reason); } catch (ignore) {} }
         alert(reason);
       });
@@ -3495,15 +3513,16 @@
       var historyIndex = historyList.length, valueIndex = historyList.length;
       historyList[valueIndex] = "";
       return ecc.then(function () {
-        var input = document.createElement("textarea"), validate = document.createElement("button");
-        input.className = "prompt";
-        input.placeholder = "> Type your command here. Type `help` for more information.";
-        input.setAttribute("rows", 1);
+        var elements, input, validate;
+        elements = htmlToElements("<table class=\"prompt-line\"><tbody><tr>" + // table is index 0
+                                  "<td><span class=\"prompt-prefix\">&gt;</span></td>" + // span is index 4
+                                  "<td style=\"width: 100%;\"><textarea rows=\"1\" style=\"width: 100%;\" class=\"prompt\" placeholder=\"Type your command here. Type `help` for more information.\"></textarea></td>" + // textarea is index 6
+                                  "<td><button class=\"prompt-button\">Run</button></td>" + // textarea is index 8
+                                  "</tr></tbody></table>");
+        input = elements[6];
+        validate = elements[8];
+        root.appendChild(elements[0]);
         setTimeout(function () { input.focus(); });
-        root.appendChild(input);
-        validate.textContent = "Execute";
-        validate.className = "prompt-button";
-        root.appendChild(validate);
         return new Promise(function (done) {
           function historyUp() {
             if (historyIndex === historyList.length - 1) {
