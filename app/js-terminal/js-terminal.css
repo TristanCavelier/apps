@@ -9,7 +9,6 @@
   background-color: black;
 }
 .js-terminal .prompt, .js-terminal .prompt-button {
-  width: 100%;
   border: 1px solid gray;
   box-sizing: border-box;
   vertical-align: top;
