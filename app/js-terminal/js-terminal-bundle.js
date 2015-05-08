@@ -1014,17 +1014,17 @@
 
   //////////////////////////////////////////////////
 
-  function downloadAs(filename, mimetype, data) {
+  function downloadAs(filename, data, mimetype) {
     /**
      * Allows the user to download `data` as a file which name is defined by
      * `filename`. The `mimetype` will help the browser to choose the associated
      * application to open with.
      *
      * @param  {String} filename The file name.
-     * @param  {String} mimetype The data type.
      * @param  {Any} data The data to download.
+     * @param  {String} mimetype The data type.
      */
-    data = URL.createObjectURL(new Blob([data], {"type": mimetype}));
+    data = URL.createObjectURL(new Blob([data], {"type": (mimetype || (data && data.type)) || "application/octet-stream"}));
     var a = document.createElement("a");
     if (a.download !== undefined) {
       a.download = filename;
@@ -2272,8 +2272,8 @@
     return this.then(function (input) {
       downloadAs(
         args.string.shift() || args.object[0].filename,
-        args.string.shift() || args.object[0].mimetype,
-        input
+        input,
+        args.string.shift() || args.object[0].mimetype
       );
       return input;
     });
@@ -3392,6 +3392,10 @@
 
   jsTerminal.commands.links = jsTerminal.commands.showLinks;
 
+  jsTerminal.commands.download = function (uri) {
+    return ecc.getURI(uri).downloadAs(uri.replace(/^(?:[a-z]+:)(?:.*\/)?([^\/]*)$/, "$1") || "untitled").value("");
+  };
+
   jsTerminal.commands.upload = function (uri) {
     return ecc.promptFile().then(function (file) {
       if (!file) {
@@ -3477,6 +3481,19 @@
     return div.querySelectorAll("*");
   }
 
+  function fitTextareaHeightToText(event) {
+    // detect border height
+    var borderHeight = parseInt(event.target.offsetHeight, 10) - parseInt(event.target.clientHeight, 10);
+    // optional line, allow to decrease the height of the textarea
+    event.target.style.height = (event.target.scrollHeight - 16) + "px"; // 16px is the default value of 1em
+    // update the height of the textarea (grows only)
+    event.target.style.height = (event.target.scrollHeight + borderHeight) + "px";
+  }
+
+  function asyncFitTextareaHeightToText(event) {
+    setTimeout(fitTextareaHeightToText, 0, event);
+  }
+
   jsTerminal.create = function (param) {
     var rc, root, historyList = [], onError, onValue, onAnswer, tmp;
     rc = param.rc || null;
@@ -3516,13 +3533,15 @@
         var elements, input, validate;
         elements = htmlToElements("<table class=\"prompt-line\"><tbody><tr>" + // table is index 0
                                   "<td><span class=\"prompt-prefix\">&gt;</span></td>" + // span is index 4
-                                  "<td style=\"width: 100%;\"><textarea rows=\"1\" style=\"width: 100%;\" class=\"prompt\" placeholder=\"Type your command here. Type `help` for more information.\"></textarea></td>" + // textarea is index 6
+                                  "<td style=\"width: 100%;\"><textarea style=\"width: 100%;\" class=\"prompt\" placeholder=\"Type your command here. Type `help` for more information.\"></textarea></td>" + // textarea is index 6
                                   "<td><button class=\"prompt-button\">Run</button></td>" + // textarea is index 8
                                   "</tr></tbody></table>");
         input = elements[6];
         validate = elements[8];
         root.appendChild(elements[0]);
         setTimeout(function () { input.focus(); });
+        input.style.height = "1em";
+        fitTextareaHeightToText({target: input});
         return new Promise(function (done) {
           function historyUp() {
             if (historyIndex === historyList.length - 1) {
@@ -3539,21 +3558,18 @@
               input.value = historyList[historyIndex];
             }
           }
-          function updatePrompt() {
-            input.setAttribute("rows", input.value.split("\n").length || 1);
-          }
           function submit() {
-            /*global onKeyDown */
+            /*global onInputKeyDown */
             if (input.value === "") { return; }
-            input.removeEventListener("keydown", onKeyDown);
+            input.removeEventListener("keydown", onInputKeyDown);
+            input.removeEventListener("keydown", asyncFitTextareaHeightToText);
             input.setAttribute("class", input.getAttribute("class") + " disabled");
             input.disabled = true;
             validate.removeEventListener("click", submit);
             validate.remove();
             done(input.value);
           }
-          function onKeyDown(ev) {
-            setTimeout(updatePrompt);
+          function onInputKeyDown(ev) {
             if (ev.ctrlKey) {
               if (ev.key === "ArrowUp" || ev.key === "Up" || ev.keyIdentifier === "Up") {
                 historyUp();
@@ -3569,7 +3585,8 @@
             }
           }
           validate.addEventListener("click", submit);
-          input.addEventListener("keydown", onKeyDown);
+          input.addEventListener("keydown", asyncFitTextareaHeightToText);
+          input.addEventListener("keydown", onInputKeyDown);
         });
       }).then(function (inputValue) {
         var output = document.createElement("div");
