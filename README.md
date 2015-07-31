@@ -4,7 +4,7 @@ apps
 - List of apps
     - [js-terminal](#js-terminal)
     - [code-editor](#code-editor)
-- License
+- [License](#license)
 
 
 js-terminal
