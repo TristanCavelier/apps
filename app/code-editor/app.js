@@ -183,7 +183,7 @@
   commands.download = function (cm) {
     var filename = prompt("Filename:");
     if (!filename) { return alert("Empty filename, aborting."); }
-    toolbox.downloadAs(filename, "application/octet-stream", cm.getValue());
+    toolbox.downloadAs(filename, cm.getValue(), "application/octet-stream");
   };
   commands["mode doc"] = "{javascript|html|python|...}";
   commands.mode = function (cm, args) {
