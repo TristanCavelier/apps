@@ -170,6 +170,7 @@
     return ecc.value(cm.getValue()).putURI(args[1]).then(function () {
       editorURI = args[1];
       location.hash = "#" + args[1];
+      editor.modified = false;
     }).catch(alert).then(function () {
       document.title = generateTitleFromURI(editorURI);
       cm.setOption("readOnly", false);
@@ -314,6 +315,18 @@
 
   window.editor = editor;
 
+  /////////////////////////
+  // Before unload popup //
+  /////////////////////////
+  
+  editor.on("change", function () {
+    editor.modified = true;
+  });
+  window.onbeforeunload = function () {
+    if (editor.modified) {
+      return "Don't forget to save your work!";
+    }
+  };
 
   //////////////////////
   // Add gist feature //
