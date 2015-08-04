@@ -91,8 +91,8 @@
     editorTextarea = document.createElement("textarea");
     document.body.appendChild(editorTextarea);
   }
-  // XXX onbeforeunload if (modified) { return "are you sure?"; }
 
+  function setModified(cm) { cm.modified = true; }
 
   //////////////////
   // Set commands //
@@ -126,6 +126,7 @@
       alert("Cannot open any resource right now. Please try later.");
       return;
     }
+    cm.off("change", setModified);
     cm.setOption("readOnly", true);
     if (!args[1]) { args[1] = prompt("Open URI:", editorURI); }
     if (!args[1]) {
@@ -149,9 +150,11 @@
       location.hash = "#" + args[1];
       cm.setValue(text);
       cm.setOption("mode", mimetype || "text");
+      cm.modified = false;
       document.title = generateTitleFromURI(editorURI);
     }).catch(alert).then(function () {
       cm.setOption("readOnly", false);
+      cm.on("change", setModified);
     });
   };
   commands["saveAs doc"] = "Save the current data to another URI.";
@@ -309,24 +312,18 @@
     mode: "text"
   });
 
-  if (location.hash) {
-    commands.open(editor, ["open", location.hash.slice(1)]);
-  }
-
-  window.editor = editor;
-
-  /////////////////////////
-  // Before unload popup //
-  /////////////////////////
-  
-  editor.on("change", function () {
-    editor.modified = true;
-  });
+  editor.on("change", setModified);
   window.onbeforeunload = function () {
     if (editor.modified) {
       return "Don't forget to save your work!";
     }
   };
+
+  if (location.hash) {
+    commands.open(editor, ["open", location.hash.slice(1)]);
+  }
+
+  window.editor = editor;
 
   //////////////////////
   // Add gist feature //
