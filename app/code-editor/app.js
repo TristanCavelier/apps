@@ -314,6 +314,9 @@
 
   editor.on("change", setModified);
   window.onbeforeunload = function () {
+    if (editor.getOption("readOnly")) {
+      return "An action is on going! May be saving your work!";
+    }
     if (editor.modified) {
       return "Don't forget to save your work!";
     }
