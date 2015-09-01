@@ -3483,11 +3483,15 @@
 
   function fitTextareaHeightToText(event) {
     // detect border height
-    var borderHeight = parseInt(event.target.offsetHeight, 10) - parseInt(event.target.clientHeight, 10);
-    // optional line, allow to decrease the height of the textarea
-    event.target.style.height = (event.target.scrollHeight - 16) + "px"; // 16px is the default value of 1em
-    // update the height of the textarea (grows only)
-    event.target.style.height = (event.target.scrollHeight + borderHeight) + "px";
+    var layout = document.createElement("div"), textarea = event.target;
+    layout.style.display = "inline-block";
+    layout.style.boxSizing = "border-box";
+    layout.style.width = "1px";
+    layout.style.height = (textarea.scrollHeight + textarea.offsetHeight - textarea.clientHeight) + "px";
+    textarea.parentNode.insertBefore(layout, textarea);
+    textarea.style.height = "1em";
+    textarea.style.height = (textarea.scrollHeight + textarea.offsetHeight - textarea.clientHeight) + "px";
+    layout.remove();
   }
 
   function asyncFitTextareaHeightToText(event) {
