@@ -193,8 +193,18 @@
   commands.mode = function (cm, args) {
     cm.setOption("mode", modeShortcuts[args[1]] || args[1]);
     cm.setOption("lint", false);
-    if (CodeMirror.lint[cm.getOption("mode")]) {
+    if (cm.getOption("krxAutoLint") && CodeMirror.lint[cm.getOption("mode")]) {
       setTimeout(function () { cm.setOption("lint", true); });
+    }
+  };
+  commands["lint doc"] = "Toggle automatic lint";
+  commands.lint = function (cm) {
+    if (cm.getOption("lint")) {
+      cm.setOption("krxAutoLint", false);
+      cm.setOption("lint", false);
+    } else if (CodeMirror.lint[cm.getOption("mode")]) {
+      cm.setOption("krxAutoLint", true);
+      cm.setOption("lint", true);
     }
   };
   commands["keyMap doc"] = "{default|krx|emacs|vim}";
@@ -224,17 +234,6 @@
   /*jslint evil: false */
 
   /*
-    lint: function (cm) {
-      // Why two setTimeout? because the first sometimes doesn't works... =)
-      function tryToEnableLint() {
-        try {
-          cm.setOption("lint", false);
-          cm.setOption("lint", true);
-        } catch (ignore) {}
-      }
-      root.setTimeout(tryToEnableLint);
-      root.setTimeout(tryToEnableLint);
-    },
     "remove-trailing-spaces": function (cm) {
       var position = cm.getCursor();
       cm.setValue(cm.getValue().replace(/[ \t]+(\r)?\n/g, '$1\n'));
@@ -306,6 +305,7 @@
 
     lint: false,
     gutters: ["CodeMirror-lint-markers"],
+    krxAutoLint: true,
 
     autofocus: true, // default false
     theme: "rubyblue", // default "default"
