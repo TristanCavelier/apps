@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Version 0.1.0-16
+# Version 0.1.1-1
 
 #
 # A list of the resources that browsers should cache to have
@@ -19,9 +19,9 @@ NETWORK:
 
 CACHE:
 index.html
-http://rawgit.com/TristanCavelier/apps/master/app/code-editor/dependency-concatenation.css
-http://rawgit.com/TristanCavelier/apps/master/app/code-editor/dependency-concatenation.js
-http://rawgit.com/TristanCavelier/apps/master/lib/toolbox.js
-http://rawgit.com/TristanCavelier/apps/master/lib/codemirror-keymap-krx.js
-http://rawgit.com/TristanCavelier/apps/master/app/code-editor/app.css
-http://rawgit.com/TristanCavelier/apps/master/app/code-editor/app.js
+https://rawgit.com/TristanCavelier/apps/master/app/code-editor/dependency-concatenation.css
+https://rawgit.com/TristanCavelier/apps/master/app/code-editor/dependency-concatenation.js
+https://rawgit.com/TristanCavelier/apps/master/lib/toolbox.js
+https://rawgit.com/TristanCavelier/apps/master/lib/codemirror-keymap-krx.js
+https://rawgit.com/TristanCavelier/apps/master/app/code-editor/app.css
+https://rawgit.com/TristanCavelier/apps/master/app/code-editor/app.js
