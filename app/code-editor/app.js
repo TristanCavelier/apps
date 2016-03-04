@@ -332,7 +332,7 @@
       cm.setOption("theme", randomChoose(["3024-night", "monokai", "blackboard", "rubyblue", "cobalt"]));
       return;
     }
-    cm.setOption("theme", args[1] || "default");
+    cm.setOption("theme", args.slice(1).join(" ") || "default");
   };
   commands["tab-size doc"] = "Set tab-size (int).";
   commands["tab-size"] = function (cm, args) {
